@@ -18,12 +18,12 @@ minimizohet; zgjidhje eshte f = 0. Backtracking nuk lejon kurre f > 0 ne gjendje
 **Algoritmi.**
 - *DFS me backtracking:* qeliza e radhes eshte ajo me me pak vlera te lejuara (MRV); nese ndonje qelize s'ka vlere, dega braktiset.
 - *IDDFS:* kufiri i thellesise (numri i qelizave te mbushura) rritet derisa gjendet zgjidhja.
-- **Kufiri fillestar (zgjedhje e rendesishme).** Zgjidhja kerkon te gjitha qelizat te mbushura, ndaj asnje kufi me i vogel se
-  numri i qelizave te lira nuk mund ta gjeje; çdo iteracion i tille eksploron te gjithe nenpemen pa rezultat. Prandaj IDDFS fillon
-  nga ky kufi minimal (default). Me `--textbook` IDDFS fillon nga kufiri 1, sipas librit; ne kete rast kerkimi eshte shume
-  me i ngadalte (praktik vetem per n ≤ 5–6). Versioni i meparshem (kufiri ne rreshta, qeliza ne rend fiks, pa MRV) arrinte vetem n = 7 ne ~17 s.
+- **Kufiri fillestar.** Default: IDDFS i plote nga libri, kufiri fillon ne 1 dhe rritet per 1 derisa gjendet zgjidhja.
+  Eshte praktik per n ≤ 6; per n me te madh programi kalon automatikisht ne `--fast` dhe e shfaq mesazhin.
+  Me `--fast` kufiri fillon te numri i qelizave te lira: zgjidhja kerkon te gjitha qelizat te mbushura, ndaj asnje kufi
+  me i vogel nuk mund ta gjeje dhe ato iteracione jane pune e kote. Eshte optimizim per n te medha, jo algoritmi bazë.
 
-**Rezultate (te matura, default).**
+**Rezultate (te matura, `--fast`).**
 
 | n | Java |
 |---|---|
@@ -36,7 +36,7 @@ minimizohet; zgjidhje eshte f = 0. Backtracking nuk lejon kurre f > 0 ne gjendje
 
 (n=60 nuk perfundoi brenda 100 s ne Java.)
 
-Me `--textbook`: n=5 → 2882 nyje; n=6 → ~567 mije nyje (Java 108 ms).
+IDDFS i plote (default): n=5 → 2882 nyje (~4 ms); n=6 → ~567 mije nyje (~100 ms).
 Programet e verifikojne vete rezultatin (`Verifikimi: OK`).
 
-Ekzekutimi: `java latin_square/LatinSquare.java [n] [--textbook]`.
+Ekzekutimi: `java latin_square/LatinSquare.java [n] [--fast]`.

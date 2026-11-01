@@ -2,8 +2,8 @@
 $ErrorActionPreference = "Stop"
 $root = $PSScriptRoot
 
-Write-Host "`n##### Latin Square (n = 12) #####"
-java "$root\latin_square\LatinSquare.java" 12
+Write-Host "`n##### Latin Square (n = 5, IDDFS i plote) #####"
+java "$root\latin_square\LatinSquare.java" 5
 Write-Host "`n##### Sudoku (Easy, Medium, Hard) #####"
 java "$root\sudoku\Sudoku.java"
 Write-Host "`n##### Social Golfers (9 jave) #####"

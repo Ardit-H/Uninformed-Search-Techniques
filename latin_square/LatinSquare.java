@@ -16,17 +16,19 @@ import java.util.Scanner;
  *    nuk ka asnje vlere te lejuar, kthehemi mbrapa (backtracking) dhe provojme vlere tjeter.
  *
  * Dy mënyra per kufirin fillestar:
- *  - E zakonshme (default): startLimit = numri i qelizave te lira. Zgjidhja kerkon te gjitha qelizat te mbushura,
- *    ndaj asnje kufi me i vogel nuk mund ta gjeje; ato iteracione do te ishin pune e kote (eksplorim i plote pa
- *    rezultat). Keshtu IDDFS fillon nga thellesia minimale ku mund te ekzistoje zgjidhje.
- *  - --textbook: startLimit = 1, IDDFS i plote nga libri. Eshte shume i ngadalte: praktik vetem per n <= 5.
+ *  - E zakonshme (default): IDDFS i plote nga libri. Kufiri fillon ne 1 dhe rritet per 1 ne çdo iteracion,
+ *    derisa gjendet zgjidhja. Praktik per n <= MAX_PLAIN_N (6); per n me te madh kalon automatikisht ne --fast.
+ *  - --fast: startLimit = numri i qelizave te lira. Zgjidhja kerkon te gjitha qelizat te mbushura, ndaj asnje kufi
+ *    me i vogel nuk mund ta gjeje; ato iteracione jane pune e kote. Keshtu IDDFS fillon nga thellesia minimale
+ *    ku mund te ekzistoje zgjidhje (optimizim per n te medha, deri ne ~50).
  *
  * Thyerje simetrie: rreshti i pare dhe kolona e pare fiksohen si 1..n. Çdo Latin Square
  * mund te kthehet ne kete forme duke ndryshuar rendin e rreshtave/kolonave/simboleve.
  *
- * Perdorimi: java LatinSquare [n] [--textbook]
+ * Perdorimi: java LatinSquare [n] [--fast]
  */
 public class LatinSquare {
+    static final int MAX_PLAIN_N = 6;   // mbi kete n, IDDFS i plote (kufi nga 1) eshte shume i ngadalte
     static int size;                 // n
     static int[][] square;           // tabela; 0 = qelize e paplotesuar
     static long[] usedInRow;          // usedInRow[r] = bitmaske e vlerave te perdorura ne rreshtin r (bit v = vlera v)
@@ -128,7 +130,7 @@ public class LatinSquare {
     }
 
     public static void main(String[] args) {
-        boolean textbook = Arrays.asList(args).contains("--textbook");
+        boolean fast = Arrays.asList(args).contains("--fast");
         String numberArgument = null;
         for (String arg : args) if (!arg.startsWith("--")) numberArgument = arg;
         if (numberArgument != null) {
@@ -142,8 +144,12 @@ public class LatinSquare {
             return;
         }
 
+        if (!fast && size > MAX_PLAIN_N) {
+            System.out.println("n > " + MAX_PLAIN_N + ": IDDFS i plote eshte shume i ngadalte, kalohet ne --fast (kufiri fillon te numri i qelizave te lira).");
+            fast = true;
+        }
         long startTime = System.nanoTime();
-        boolean found = iterativeDeepeningSearch(textbook ? 1 : (size - 1) * (size - 1));
+        boolean found = iterativeDeepeningSearch(fast ? (size - 1) * (size - 1) : 1);
         long elapsedMs = (System.nanoTime() - startTime) / 1_000_000;
 
         if (!found) {
