@@ -16,27 +16,20 @@ minimizohet; zgjidhje eshte f = 0. Backtracking nuk lejon kurre f > 0 ne gjendje
 (numri i tyre per n = 1..8: 1, 1, 1, 4, 56, 9408, 16942080, 535281401856).
 
 **Algoritmi.**
-- *DFS me backtracking:* qeliza e radhes eshte ajo me me pak vlera te lejuara (MRV); nese ndonje qelize s'ka vlere, dega braktiset.
+- *DFS me backtracking:* qelizat plotesohen ne rend fiks (rresht pas rreshti); nese per nje qelize s'ka vlere te lejuar, dega braktiset.
 - *IDDFS:* kufiri i thellesise (numri i qelizave te mbushura) rritet derisa gjendet zgjidhja.
 - **Kufiri fillestar.** Default: IDDFS i plote nga libri, kufiri fillon ne 1 dhe rritet per 1 derisa gjendet zgjidhja.
   Eshte praktik per n ≤ 6; per n me te madh programi kalon automatikisht ne `--fast` dhe e shfaq mesazhin.
   Me `--fast` kufiri fillon te numri i qelizave te lira: zgjidhja kerkon te gjitha qelizat te mbushura, ndaj asnje kufi
   me i vogel nuk mund ta gjeje dhe ato iteracione jane pune e kote. Eshte optimizim per n te medha, jo algoritmi bazë.
 
-**Rezultate (te matura, `--fast`).**
+**Rezultate (te matura).**
 
-| n | Java |
-|---|---|
-| 6 | <1 ms |
-| 10 | 1 ms |
-| 20 | 16 ms |
-| 30 | 15 ms |
-| 40 | ~3.4 s |
-| 50 | ~3.3 s |
+IDDFS i plote (default): n=5 → 4913 nyje (~1 ms); n=6 → ~1.19 milion nyje (~27 ms).
 
-(n=60 nuk perfundoi brenda 100 s ne Java.)
+Me `--fast`: n=7, 8, 10, 12 → menjehere; n=15 → ~18.8 milion nyje (~0.9 s). Pa heuristike, n=20 e siper nuk perfundon
+brenda 30 s, prandaj programi pranon n ≤ 15.
 
-IDDFS i plote (default): n=5 → 2882 nyje (~4 ms); n=6 → ~567 mije nyje (~100 ms).
 Programet e verifikojne vete rezultatin (`Verifikimi: OK`).
 
 Ekzekutimi: `java latin_square/LatinSquare.java [n] [--fast]`.

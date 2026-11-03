@@ -12,15 +12,15 @@ import java.util.Scanner;
  *    (pa numeruar rreshtin dhe kolonen e pare, qe jane te fiksuara).
  *  - IDDFS ben DFS me kufi thellesie dhe e rrit kufirin: startLimit, startLimit+1, ... deri ne numrin e
  *    qelizave te lira. Ne çdo iteracion DFS nuk lejohet te mbushe me shume qeliza se kufiri.
- *  - Qeliza e radhes zgjidhet dinamikisht: ajo me me pak vlera te lejuara (MRV). Nese ndonje qelize
- *    nuk ka asnje vlere te lejuar, kthehemi mbrapa (backtracking) dhe provojme vlere tjeter.
+ *  - Qelizat plotesohen ne rend fiks (rresht pas rreshti). Nese per nje qelize nuk ka asnje vlere te lejuar,
+ *    kthehemi mbrapa (backtracking) dhe provojme vlere tjeter te qelizes se meparshme.
  *
  * Dy mënyra per kufirin fillestar:
  *  - E zakonshme (default): IDDFS i plote nga libri. Kufiri fillon ne 1 dhe rritet per 1 ne çdo iteracion,
  *    derisa gjendet zgjidhja. Praktik per n <= MAX_PLAIN_N (6); per n me te madh kalon automatikisht ne --fast.
  *  - --fast: startLimit = numri i qelizave te lira. Zgjidhja kerkon te gjitha qelizat te mbushura, ndaj asnje kufi
  *    me i vogel nuk mund ta gjeje; ato iteracione jane pune e kote. Keshtu IDDFS fillon nga thellesia minimale
- *    ku mund te ekzistoje zgjidhje (optimizim per n te medha, deri ne ~50).
+ *    ku mund te ekzistoje zgjidhje (optimizim per n me te medha, deri ne ~15).
  *
  * Thyerje simetrie: rreshti i pare dhe kolona e pare fiksohen si 1..n. Çdo Latin Square
  * mund te kthehet ne kete forme duke ndryshuar rendin e rreshtave/kolonave/simboleve.
@@ -28,6 +28,7 @@ import java.util.Scanner;
  * Perdorimi: java LatinSquare [n] [--fast]
  */
 public class LatinSquare {
+    static final int MAX_N = 15;        // mbi kete n, kerkimi pa heuristike zgjat shume
     static final int MAX_PLAIN_N = 6;   // mbi kete n, IDDFS i plote (kufi nga 1) eshte shume i ngadalte
     static int size;                 // n
     static int[][] square;           // tabela; 0 = qelize e paplotesuar
@@ -69,23 +70,13 @@ public class LatinSquare {
         if (remainingCells == 0) return true;      // asnje qelize e lire: zgjidhja u gjet
         if (depth == depthLimit) return false;     // arritem kufirin e thellesise (cutoff)
 
-        // zgjidh qelizen e lire me me pak vlera te lejuara (MRV)
-        int chosenRow = -1, chosenCol = -1, fewestOptions = size + 1;
-        long chosenMask = 0L;
-        for (int row = 1; row < size; row++) {
-            for (int col = 1; col < size; col++) {
-                if (square[row][col] != 0) continue;
-                long mask = allowedValues(row, col);
-                int options = Long.bitCount(mask);
-                if (options < fewestOptions) {
-                    chosenRow = row;
-                    chosenCol = col;
-                    chosenMask = mask;
-                    fewestOptions = options;
-                    if (options == 0) return false; // qelize pa mundesi: dega braktiset (backtracking)
-                }
-            }
-        }
+        // qeliza e radhes: e para e lire ne rend rresht pas rreshti
+        int chosenRow = -1, chosenCol = -1;
+        outer:
+        for (int row = 1; row < size; row++)
+            for (int col = 1; col < size; col++)
+                if (square[row][col] == 0) { chosenRow = row; chosenCol = col; break outer; }
+        long chosenMask = allowedValues(chosenRow, chosenCol);
 
         remainingCells--;
         for (long remaining = chosenMask; remaining != 0; remaining &= remaining - 1) {
@@ -139,8 +130,8 @@ public class LatinSquare {
             System.out.print("Jepni n: ");
             size = new Scanner(System.in).nextInt();
         }
-        if (size < 1 || size > 60) {
-            System.out.println("n duhet te jete ne [1, 60].");
+        if (size < 1 || size > MAX_N) {
+            System.out.println("n duhet te jete ne [1, " + MAX_N + "].");
             return;
         }
 

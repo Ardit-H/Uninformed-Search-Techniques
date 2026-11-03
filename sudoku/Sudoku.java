@@ -5,15 +5,14 @@ import java.util.ArrayDeque;
  *
  * Si funksionon kerkimi:
  *  - Nje "nyje" eshte nje tabele Sudoku e mbushur pjeserisht (81 numra, 0 = qelize bosh).
- *  - Nga çdo nyje zgjedhim NJE qelize bosh dhe krijojme nje nyje-femije per çdo vlere
+ *  - Nga çdo nyje marrim qelizen e pare bosh dhe krijojme nje nyje-femije per çdo vlere
  *    qe lejohet aty (qe s'perseritet ne rresht, kolone, bllok 3x3).
  *  - BFS perdor FIFO queue: zgjeron te gjitha nyjet e nje niveli para se te kaloje te tjetri.
  *    (Niveli = sa qeliza jane mbushur.) Nyja e pare pa qeliza boshe eshte zgjidhja.
  *  - Backtracking: nese nje qelize nuk ka asnje vlere te lejuar, ajo nyje nuk krijon femije
  *    dhe dega braktiset.
  *
- * Qelizen e zgjedhim me heuristiken "me pak mundesi" (MRV): qeliza bosh me me pak vlera
- * te lejuara. Kjo e mban numrin e nyjeve ne queue te vogel; pa te, BFS do te mbushte memorien.
+ * Qeliza e radhes eshte gjithmone e para bosh (rresht pas rreshti); nuk perdoret asnje heuristike.
  */
 public class Sudoku {
     static final int SIZE = 9;
@@ -72,17 +71,13 @@ public class Sudoku {
             byte[] board = queue.poll();
             expandedNodes++;
 
-            // gjej qelizen bosh me me pak vlera te lejuara
-            int chosenCell = -1, chosenMask = 0, fewestOptions = SIZE + 1;
+            // qeliza e radhes: e para bosh ne rend rresht pas rreshti
+            int chosenCell = -1, chosenMask = 0;
             for (int cell = 0; cell < CELLS; cell++) {
-                if (board[cell] != 0) continue;
-                int mask = allowedValues(board, cell);
-                int options = Integer.bitCount(mask);
-                if (options < fewestOptions) {
+                if (board[cell] == 0) {
                     chosenCell = cell;
-                    chosenMask = mask;
-                    fewestOptions = options;
-                    if (options == 0) break; // qelize pa mundesi: kjo nyje s'ka zgjidhje
+                    chosenMask = allowedValues(board, cell);
+                    break;
                 }
             }
 

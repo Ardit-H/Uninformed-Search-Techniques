@@ -11,20 +11,18 @@ Backtracking mban konfliktet ne 0, ndaj matet vetem numri i qelizave boshe (qell
 **Landscape.** Hapesira naive: 9^(qeliza boshe): Easy 51 boshe (4.6·10⁴⁸), Medium 49 (5.7·10⁴⁶),
 Hard 60 (1.8·10⁵⁷). Kufizimet e ngushtojne hapesiren drastikisht.
 
-**BFS.** FIFO queue; nga çdo gjendje zgjidhet qeliza me me pak kandidate (MRV) dhe krijohet nje femije per
-çdo vlere te lejuar. Gjendjet pa kandidate braktisen (backtracking). Të gjitha nyjet e nje niveli
-zgjerohen para nivelit tjeter.
+**BFS.** FIFO queue; nga çdo gjendje merret qeliza e pare bosh (rresht pas rreshti) dhe krijohet nje femije per
+çdo vlere te lejuar. Gjendjet pa vlera te lejuara braktisen (backtracking). Të gjitha nyjet e nje niveli
+zgjerohen para nivelit tjeter. Nuk perdoret asnje heuristike.
 
 **Rezultate (te matura).**
 
 | Niveli | Nyje te zgjeruara | Queue maksimale | Koha |
 |---|---|---|---|
-| Easy | 52 | 1 | <1 ms |
-| Medium | 50 | 1 | <1 ms |
-| Hard | 18936 | 888 | ~35 ms |
+| Easy | 4632 | 738 | ~23 ms |
+| Medium | 929 | 146 | ~7 ms |
+| Hard | 2 068 781 | 356 812 | ~1 s |
 
-Pa MRV (qeliza e pare bosh) BFS do te mbante shume me tepër gjendje ne memorie, sepse ruan te gjithe nivelin.
-Koha per Hard ~35 ms, Easy/Medium ~3 ms.
 Ekzekutimi: `java sudoku/Sudoku.java`.
 
 **Kufizim.** BFS ruan gjithe nivelin ne memorie. Per tabela me shume qeliza boshe (p.sh. tabele krejt bosh)
