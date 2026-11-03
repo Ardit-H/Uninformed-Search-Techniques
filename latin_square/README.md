@@ -18,17 +18,23 @@ minimizohet; zgjidhje eshte f = 0. Backtracking nuk lejon kurre f > 0 ne gjendje
 **Algoritmi.**
 - *DFS me backtracking:* qelizat plotesohen ne rend fiks (rresht pas rreshti); nese per nje qelize s'ka vlere te lejuar, dega braktiset.
 - *IDDFS:* kufiri i thellesise (numri i qelizave te mbushura) rritet derisa gjendet zgjidhja.
-- **Kufiri fillestar.** Default: IDDFS i plote nga libri, kufiri fillon ne 1 dhe rritet per 1 derisa gjendet zgjidhja.
-  Eshte praktik per n ≤ 6; per n me te madh programi kalon automatikisht ne `--fast` dhe e shfaq mesazhin.
-  Me `--fast` kufiri fillon te numri i qelizave te lira: zgjidhja kerkon te gjitha qelizat te mbushura, ndaj asnje kufi
-  me i vogel nuk mund ta gjeje dhe ato iteracione jane pune e kote. Eshte optimizim per n te medha, jo algoritmi bazë.
+- **Default: IDDFS i plote.** Kufiri i thellesise fillon ne 1 dhe rritet per 1 ne çdo iteracion, derisa gjendet zgjidhja.
+- **`--fast` (vetem nese specifikohet).** Kufiri fillon te numri i qelizave te lira. Zgjidhja kerkon te gjitha qelizat te mbushura,
+  ndaj asnje kufi me i vogel nuk mund ta gjeje; iteracionet e hershme kapercehen dhe kerkimi perfundon ne nje iteracion, pra ne
+  praktike eshte DFS me backtracking. Eshte shtese per n me te medha, jo IDDFS i plote.
 
 **Rezultate (te matura).**
 
-IDDFS i plote (default): n=5 → 4913 nyje (~1 ms); n=6 → ~1.19 milion nyje (~27 ms).
+| n | Mënyra | Nyje te vizituara | Koha |
+|---|---|---|---|
+| 5 | default | 4913 | ~2 ms |
+| 6 | default | 1 194 076 | ~30 ms |
+| 7 | default | ~3.36 miliard | ~81 s |
+| 5 | `--fast` | 29 | <1 ms |
+| 12 | `--fast` | 9468 | ~2 ms |
+| 15 | `--fast` | ~18.8 milion | ~1 s |
 
-Me `--fast`: n=7, 8, 10, 12 → menjehere; n=15 → ~18.8 milion nyje (~0.9 s). Pa heuristike, n=20 e siper nuk perfundon
-brenda 30 s, prandaj programi pranon n ≤ 15.
+Pa heuristike, IDDFS i plote behet e papraktike per n ≥ 7, dhe `--fast` per n ≥ 20 (nuk perfundon brenda 30 s).
 
 Programet e verifikojne vete rezultatin (`Verifikimi: OK`).
 

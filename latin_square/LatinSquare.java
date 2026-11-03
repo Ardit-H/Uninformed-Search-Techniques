@@ -10,17 +10,17 @@ import java.util.Scanner;
  * Si funksionon kerkimi:
  *  - Nje "nyje" e pemes eshte tabela e mbushur pjeserisht. Thellesia e nyjes = sa qeliza jane mbushur
  *    (pa numeruar rreshtin dhe kolonen e pare, qe jane te fiksuara).
- *  - IDDFS ben DFS me kufi thellesie dhe e rrit kufirin: startLimit, startLimit+1, ... deri ne numrin e
+ *  - IDDFS ben DFS me kufi thellesie dhe e rrit kufirin: 1, 2, 3, ... deri ne numrin e
  *    qelizave te lira. Ne çdo iteracion DFS nuk lejohet te mbushe me shume qeliza se kufiri.
  *  - Qelizat plotesohen ne rend fiks (rresht pas rreshti). Nese per nje qelize nuk ka asnje vlere te lejuar,
  *    kthehemi mbrapa (backtracking) dhe provojme vlere tjeter te qelizes se meparshme.
  *
  * Dy mënyra per kufirin fillestar:
- *  - E zakonshme (default): IDDFS i plote nga libri. Kufiri fillon ne 1 dhe rritet per 1 ne çdo iteracion,
- *    derisa gjendet zgjidhja. Praktik per n <= MAX_PLAIN_N (6); per n me te madh kalon automatikisht ne --fast.
- *  - --fast: startLimit = numri i qelizave te lira. Zgjidhja kerkon te gjitha qelizat te mbushura, ndaj asnje kufi
- *    me i vogel nuk mund ta gjeje; ato iteracione jane pune e kote. Keshtu IDDFS fillon nga thellesia minimale
- *    ku mund te ekzistoje zgjidhje (optimizim per n me te medha, deri ne ~15).
+ *  - Default: IDDFS i plote nga libri. Kufiri fillon ne 1 dhe rritet per 1 ne çdo iteracion. Pa heuristike,
+ *    kostoja rritet shume shpejt: n=5 ~2 ms, n=6 ~30 ms, n=7 ~81 s.
+ *  - --fast (vetem nese specifikohet): kufiri fillon te numri i qelizave te lira. Zgjidhja kerkon te gjitha qelizat
+ *    te mbushura, ndaj asnje kufi me i vogel nuk mund ta gjeje; keshtu iteracionet e hershme kapercehen dhe kerkimi
+ *    perfundon ne nje iteracion (ne praktike DFS me backtracking). Arrin n deri ne ~15.
  *
  * Thyerje simetrie: rreshti i pare dhe kolona e pare fiksohen si 1..n. Çdo Latin Square
  * mund te kthehet ne kete forme duke ndryshuar rendin e rreshtave/kolonave/simboleve.
@@ -28,8 +28,7 @@ import java.util.Scanner;
  * Perdorimi: java LatinSquare [n] [--fast]
  */
 public class LatinSquare {
-    static final int MAX_N = 15;        // mbi kete n, kerkimi pa heuristike zgjat shume
-    static final int MAX_PLAIN_N = 6;   // mbi kete n, IDDFS i plote (kufi nga 1) eshte shume i ngadalte
+    static final int MAX_N = 60;         // kufiri teknik: vlerat ruhen ne bitmaska 64-bitesh
     static int size;                 // n
     static int[][] square;           // tabela; 0 = qelize e paplotesuar
     static long[] usedInRow;          // usedInRow[r] = bitmaske e vlerave te perdorura ne rreshtin r (bit v = vlera v)
@@ -121,8 +120,8 @@ public class LatinSquare {
     }
 
     public static void main(String[] args) {
-        boolean fast = Arrays.asList(args).contains("--fast");
         String numberArgument = null;
+        boolean fast = Arrays.asList(args).contains("--fast");
         for (String arg : args) if (!arg.startsWith("--")) numberArgument = arg;
         if (numberArgument != null) {
             size = Integer.parseInt(numberArgument);
@@ -135,10 +134,6 @@ public class LatinSquare {
             return;
         }
 
-        if (!fast && size > MAX_PLAIN_N) {
-            System.out.println("n > " + MAX_PLAIN_N + ": IDDFS i plote eshte shume i ngadalte, kalohet ne --fast (kufiri fillon te numri i qelizave te lira).");
-            fast = true;
-        }
         long startTime = System.nanoTime();
         boolean found = iterativeDeepeningSearch(fast ? (size - 1) * (size - 1) : 1);
         long elapsedMs = (System.nanoTime() - startTime) / 1_000_000;

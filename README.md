@@ -6,7 +6,7 @@ Detyra e pare semestrale – Inteligjenca Artificiale 2026. Zgjidhjet jane ne Ja
 |---|---|---|---|
 | Social Golfers (32 golfiste) | DFS + backtracking | [golfers](golfers/) | 9 jave nga DFS (7 gjenerike); maksimumi 10 i njohur, shih `--known` |
 | Sudoku (Easy, Medium, Hard) | BFS + backtracking | [sudoku](sudoku/) | te tre nivelet zgjidhen |
-| Latin Square (n x n) | IDDFS + backtracking | [latin_square](latin_square/) | IDDFS i plote per n ≤ 6; me `--fast` n deri ne 15 (~1 s) |
+| Latin Square (n x n) | IDDFS + backtracking | [latin_square](latin_square/) | IDDFS i plote (n=6 ~30 ms, n=7 ~81 s); me `--fast` n deri ne ~15 |
 
 Pemet e kerkimit (8-Puzzle, Missionaries & Cannibals, Rotating Workforce Scheduling) vizatohen me dore
 dhe dorezohen si PDF ([search_trees/Search Trees.pdf](search_trees/Search%20Trees.pdf)), prandaj nuk ka kod per to.
