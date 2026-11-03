@@ -9,7 +9,7 @@ Detyra e pare semestrale – Inteligjenca Artificiale 2026. Zgjidhjet jane ne Ja
 | Latin Square (n x n) | IDDFS + backtracking | [latin_square](latin_square/) | IDDFS i plote per n ≤ 6; me `--fast` n deri ne 15 (~1 s) |
 
 Pemet e kerkimit (8-Puzzle, Missionaries & Cannibals, Rotating Workforce Scheduling) vizatohen me dore
-dhe dorezohen si PDF, prandaj nuk ka kod per to.
+dhe dorezohen si PDF ([search_trees/Search Trees.pdf](search_trees/Search%20Trees.pdf)), prandaj nuk ka kod per to.
 
 ## Ekzekutimi
 
