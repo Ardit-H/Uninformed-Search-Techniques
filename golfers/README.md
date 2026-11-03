@@ -20,20 +20,20 @@ W ≤ ⌊31/3⌋ = 10 (çdo golfist ka 31 te tjere dhe takon 3 per jave).
 saktesisht shembulli ne tekstin e detyres. Me `--known` programi e shfaq dhe e verifikon kete zgjidhje (480 çifte unike). Ajo
 **nuk gjendet nga kerkimi yne**; eshte referenca.
 
-**Dy mënyra, te dyja DFS me backtracking.**
+**Mënyrat (te gjitha DFS me backtracking, pervec `--known`).**
 
-1. **Strukturuar (default) – 9 jave.** Variabla = java; domeni i çdo jave = 155 ndarje "te strukturuara": golfistet
-   numerohen 0..31 si vektore 5-bitesh dhe grupet jane "cosets" te nenhapesirave 2-dimensionale te GF(2)⁵. DFS zgjedh javet
-   nje nga nje (ne rend rritës, se javet s'kane rend) dhe i pret ato qe perseritin ndonje çift (backtracking).
-   Gjen 9 jave ne 409 nyje (Java ~80 ms). Ky domen arrin maksimumi 9 jave (rrjedh nga struktura e nenhapesirave), ndaj per 10 jave nuk gjen asgje.
-   *Kjo eshte zvogelim i domenit (zgjedhje modelimi), jo kerkim ne te gjitha ndarjet.* Kjo klase ndarjesh arrin 9 jave, por jo 10 (e cila kerkon ndertim tjeter, sic ka bere Aguado).
-2. **Gjenerik (`--generic`) – 7 jave.** DFS golfist pas golfisti mbi te gjitha ndarjet. DFS i thjeshte me rend fiks ngec ne **5 jave**.
-   Me renditje te rastesishme per çdo jave dhe restart pas nje numri nyjesh arrin **7 jave** (Java ~10 ms).
-   8 jave nuk gjenden brenda 25–40 s, as me kufij restart nga 20 mije deri ne 20 milion nyje, as me pruning shtese e zgjedhje
-   te golfistit me te kufizuar (e provuam, ishte me i ngadalte).
+1. **Default – DFS i paster, 5 jave.** Golfistet vendosen ne rend fiks 0..31, grup pas grupi, jave pas jave; backtracking kur nuk ka kandidat.
+   Gjen 5 jave ne 165 nyje. Per 6 jave nuk gjen asgje brenda 20 s (~444 milion nyje): vendimet e hershme e bejne te pamundur javen tjeter.
+2. **`--restart` – 7 jave.** Renditje e rastesishme e golfisteve per çdo jave dhe restart pas nje numri nyjesh. Gjen 7 jave (31 870 nyje, ~10 ms).
+   Nuk eshte me DFS i paster, sepse kerkimi nuk eshte nje kalim i vetem. 8 jave nuk gjenden brenda 25–40 s, as me kufij restart nga
+   20 mije deri ne 20 milion nyje.
+3. **`--structured` – 9 jave.** Variabla = java; domeni i çdo jave = 155 ndarje "te strukturuara": golfistet numerohen 0..31 si vektore
+   5-bitesh dhe grupet jane "cosets" te nenhapesirave 2-dimensionale te GF(2)⁵. DFS zgjedh javet nje nga nje (ne rend rritës, se javet
+   s'kane rend) dhe i pret ato qe perseritin ndonje çift. Gjen 9 jave ne 409 nyje (~90 ms). *Kjo eshte zvogelim i domenit (zgjedhje
+   modelimi), jo kerkim ne te gjitha ndarjet.* Ky domen arrin maksimumi 9 jave; per 10 nuk gjen asgje.
+4. **`--known` – 10 jave (jo kerkim).** Shfaq dhe verifikon zgjidhjen e Aguados (480 çifte unike). Nuk gjendet nga kerkimi yne; eshte referenca.
 
 Programet e verifikojne vete orarin: çdo jave ka 32 golfiste unike dhe asnje çift nuk perseritet (`Verifikimi: OK`).
 
-Ekzekutimi:
-- Java: `java golfers/Golfers.java [javet] [sekonda=30] [nyje_per_restart=3000000] [--generic | --known]`
-- Default: 9 jave (strukturuar), 7 jave me `--generic`, `--known` = zgjidhja e njohur me 10 jave (vetem shfaqje dhe verifikim).
+Ekzekutimi: `java golfers/Golfers.java [javet] [sekonda=30] [nyje_per_restart=3000000] [--restart | --structured | --known]`
+- Pa flag: DFS i paster, 5 jave. `--restart`: 7 jave. `--structured`: 9 jave. `--known`: zgjidhja e njohur me 10 jave.

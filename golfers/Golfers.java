@@ -11,33 +11,28 @@ import java.util.Random;
  * ashtu qe asnje çift golfistesh te mos jete ne te njejtin grup me shume se nje here?
  *
  * Si funksionon kerkimi (DFS):
- *  - Golfistet vendosen nje nga nje: grup pas grupi, jave pas jave.
+ *  - Golfistet vendosen nje nga nje: grup pas grupi, jave pas jave, ne rendin 0, 1, 2, ...
  *  - Kur nje grup mbushet (4 golfiste), shenojme qe ata 6 çifte jane takuar.
  *  - Kur nje jave mbushet (8 grupe), fillojme javen tjeter.
  *  - Backtracking: nese per nje grup nuk ka asnje kandidat te vlefshem, kthehemi mbrapa
  *    dhe ndryshojme vendimin e meparshem.
- *  - Kerkimi nuk ka kufi javesh: vazhdon sa te mundet dhe ruan orarin me me shume jave.
+ *  - Kerkimi vazhdon derisa arrin numrin e kerkuar te javeve ose mbaron koha, dhe ruan orarin me me shume jave.
  *
- * Programi ka dy mënyra, te dyja DFS me backtracking:
+ * Mënyrat (te gjitha DFS me backtracking, pervec --known):
  *
- * 1) STRUKTURUAR (default) - gjen 9 jave.
- *    Variabla = java; domeni i çdo jave = nje nga 155 ndarjet "e strukturuara" te 32 golfisteve ne 8 grupe.
- *    Golfistet numerohen 0..31 si vektore 5-bitesh; nje ndarje eshte bashkesia e "cosets" te nje nenhapesire
- *    2-dimensionale te GF(2)^5 (grupi = {x, x^a, x^b, x^a^b}). DFS zgjedh javet nje nga nje (ne rend rritës,
- *    se javet s'kane rend) dhe i pret ato qe perseritin ndonje çift. Kjo eshte zvogelim i domenit (zgjedhje
- *    modelimi), jo kerkim ne te gjitha ndarjet e mundshme.
+ * 0) DEFAULT - DFS i paster. Rend fiks i golfisteve, pa rastesi, pa restart. Gjen 5 jave dhe ngec aty,
+ *    sepse vendimet e hershme e bejne te pamundur javen tjeter.
  *
- * 2) GJENERIK (--generic) - gjen 7 jave. Pershkrimi me poshte.
+ * 1) --restart - DFS me renditje te rastesishme te golfisteve per çdo jave dhe restart pas nje numri nyjesh.
+ *    Gjen 7 jave. Nuk eshte me DFS i paster, sepse kerkimi nuk eshte nje kalim i vetem.
  *
- * 3) E NJOHUR (--known) - nuk eshte kerkim. Shfaq dhe verifikon zgjidhjen e njohur me 10 jave (Aguado, 2004;
- *    burimi: https://www.metalevel.at/sgp/aguado.txt). 10 jave ESHTE e mundur (11 nuk eshte); DFS yne
- *    nuk e gjen vete zgjidhjen me 10 jave, ndaj kjo mënyre sherben si referencë.
+ * 2) --structured - zvogelim i domenit. Variabla = java; domeni i çdo jave = nje nga 155 ndarjet "e strukturuara"
+ *    te 32 golfisteve ne 8 grupe: golfistet numerohen 0..31 si vektore 5-bitesh dhe grupet jane "cosets" te nje
+ *    nenhapesire 2-dimensionale te GF(2)^5. DFS zgjedh javet nje nga nje (ne rend rritës, se javet s'kane rend)
+ *    dhe i pret ato qe perseritin ndonje çift. Gjen 9 jave. Kjo NUK eshte kerkim ne te gjitha ndarjet e mundshme.
  *
- * Pse "restart" dhe renditje te rastesishme (mënyra gjenerike): DFS i thjeshte provon golfistet gjithmone
- * sipas rendit 1,2,3,... dhe ngec shpejt (rreth 5 jave) sepse vendimet e hershme
- * e bejne te pamundur javen tjeter. Per çdo jave perdorim nje renditje tjeter te rastesishme
- * te golfisteve, dhe nese kerkimi nuk perfundon pas nje numri nyjesh, e fillojme
- * nga e para me renditje te reja.
+ * 3) --known - nuk eshte kerkim. Shfaq dhe verifikon zgjidhjen e njohur me 10 jave (Aguado, 2004;
+ *    burimi: https://www.metalevel.at/sgp/aguado.txt). 10 jave ESHTE e mundur (11 nuk eshte).
  */
 public class Golfers {
     static final int PLAYERS = 32;
@@ -194,7 +189,7 @@ public class Golfers {
     }
 
     // ======================================================================
-    // 1) MËNYRA E STRUKTURUAR: DFS mbi 155 ndarjet e mundshme te javes
+    // MËNYRA E STRUKTURUAR (--structured): DFS mbi 155 ndarjet e mundshme te javes
     // ======================================================================
 
     static int[][][] candidateWeeks;      // candidateWeeks[i] = java i: 8 grupe me nga 4 golfiste
@@ -299,17 +294,24 @@ public class Golfers {
         System.out.println("Verifikimi: " + (isValidSchedule(weeks) ? "OK" : "GABIM"));
     }
 
+    /** Rend fiks 0, 1, 2, ... 31 per te gjitha javet (DFS i paster). */
+    static void setIdentityOrders() {
+        for (int week = 0; week < MAX_WEEKS; week++)
+            for (int p = 0; p < PLAYERS; p++) playerOrder[week][p] = p;
+    }
+
     public static void main(String[] args) {
-        // Perdorimi: java Golfers [javet] [sekonda=30] [nyje_per_restart=3000000] [--generic | --known]
-        //            default: 9 jave ne mënyren e strukturuar, 7 jave ne --generic
-        boolean generic = Arrays.asList(args).contains("--generic");
+        // Perdorimi: java Golfers [javet] [sekonda=30] [nyje_per_restart=3000000] [--restart | --structured | --known]
+        //            default: DFS i paster, 5 jave; --restart: 7 jave; --structured: 9 jave
+        boolean restartMode = Arrays.asList(args).contains("--restart");
+        boolean structured = Arrays.asList(args).contains("--structured");
         if (Arrays.asList(args).contains("--known")) {
             showKnownSolution();
             return;
         }
         List<String> numbers = new ArrayList<>();
         for (String arg : args) if (!arg.startsWith("--")) numbers.add(arg);
-        targetWeeks = numbers.size() > 0 ? Integer.parseInt(numbers.get(0)) : (generic ? 7 : 9);
+        targetWeeks = numbers.size() > 0 ? Integer.parseInt(numbers.get(0)) : (structured ? 9 : restartMode ? 7 : 5);
         int seconds = numbers.size() > 1 ? Integer.parseInt(numbers.get(1)) : 30;
         if (numbers.size() > 2) restartNodeLimit = Long.parseLong(numbers.get(2));
         if (targetWeeks < 1 || targetWeeks > MAX_WEEKS) {
@@ -321,7 +323,11 @@ public class Golfers {
         deadlineNanos = startTime + seconds * 1_000_000_000L;
         boolean found = false;
         int restarts = 0;
-        if (generic) {
+        if (structured) {
+            restartNodeLimit = Long.MAX_VALUE;   // mënyra e strukturuar nuk perdor restart
+            buildCandidateWeeks();
+            found = chooseWeeks(0, 0);
+        } else if (restartMode) {
             Random random = new Random(42);
             while (!found && !timeIsUp) {
                 shufflePlayerOrders(random, restarts == 0);
@@ -333,9 +339,9 @@ public class Golfers {
                 if (!restartRequested && !timeIsUp) break;   // hapesira u kerkua e gjithe pa rezultat
             }
         } else {
-            restartNodeLimit = Long.MAX_VALUE;   // mënyra e strukturuar nuk perdor restart
-            buildCandidateWeeks();
-            found = chooseWeeks(0, 0);
+            restartNodeLimit = Long.MAX_VALUE;   // DFS i paster: pa restart, rend fiks
+            setIdentityOrders();
+            found = placePlayers(0, 0, 0, -1, (1L << PLAYERS) - 1, 0L);
         }
         long elapsedMs = (System.nanoTime() - startTime) / 1_000_000;
 
@@ -355,10 +361,5 @@ public class Golfers {
         else System.out.println("Hapesira u kerkua plotesisht. Maksimumi i gjetur: " + bestWeekCount + " jave.");
         System.out.println("Verifikimi: " + (isValidSchedule(bestSchedule) ? "OK" : "GABIM"));
         System.out.println("Nyje te vizituara: " + visitedNodes + ", restart: " + restarts + ", koha: " + elapsedMs + " ms");
-
-        if (args.length == 0) {   // ekzekutim pa argumente (p.sh. butoni Run): shfaq edhe maksimumin e njohur per krahasim
-            System.out.println("\n=== Per krahasim: maksimumi i njohur (10 jave) ===");
-            showKnownSolution();
-        }
     }
 }

@@ -4,7 +4,7 @@ Detyra e pare semestrale – Inteligjenca Artificiale 2026. Zgjidhjet jane ne Ja
 
 | Problemi | Algoritmi | Folderi | Rezultati |
 |---|---|---|---|
-| Social Golfers (32 golfiste) | DFS + backtracking | [golfers](golfers/) | 9 jave nga DFS (7 gjenerike); maksimumi 10 i njohur, shih `--known` |
+| Social Golfers (32 golfiste) | DFS + backtracking | [golfers](golfers/) | DFS i paster: 5 jave; `--restart`: 7; `--structured`: 9; maksimumi i njohur 10 (`--known`) |
 | Sudoku (Easy, Medium, Hard) | BFS + backtracking | [sudoku](sudoku/) | te tre nivelet zgjidhen |
 | Latin Square (n x n) | IDDFS + backtracking | [latin_square](latin_square/) | IDDFS i plote (n=6 ~30 ms, n=7 ~81 s); me `--fast` n deri ne ~15 |
 
@@ -16,7 +16,7 @@ dhe dorezohen si PDF ([search_trees/Search Trees.pdf](search_trees/Search%20Tree
 Te gjitha njeheresh (PowerShell): `.\run_all.ps1`
 
 ```
-java golfers/Golfers.java [javet] [sekonda=30] [--generic | --known]
+java golfers/Golfers.java [javet] [sekonda=30] [--restart | --structured | --known]
 java sudoku/Sudoku.java [easy|medium|hard]
 java latin_square/LatinSquare.java [n] [--fast]
 ```
