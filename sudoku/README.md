@@ -8,7 +8,7 @@ asnje perseritje ne rresht, kolone, bllok. Gjendja: `byte[81]` (0 = bosh).
 **Funksioni objektiv.** f(x) = numri i qelizave boshe + numri i konflikteve; zgjidhje kur f = 0.
 Backtracking mban konfliktet ne 0, ndaj matet vetem numri i qelizave boshe (qellimi: 0).
 
-**Landscape.** Hapesira naive: 9^(qeliza boshe): Easy 51 boshe (4.6·10⁴⁸), Medium 49 (5.7·10⁴⁶),
+**Landscape.** Hapesira naive: 9^(qeliza boshe): Easy 51 boshe (4.6·10⁴⁸), Medium 59 (2.0·10⁵⁶),
 Hard 60 (1.8·10⁵⁷). Kufizimet e ngushtojne hapesiren drastikisht.
 
 **BFS.** FIFO queue; nga çdo gjendje merret qeliza e pare bosh (rresht pas rreshti) dhe krijohet nje femije per
@@ -20,8 +20,12 @@ zgjerohen para nivelit tjeter. Nuk perdoret asnje heuristike.
 | Niveli | Nyje te zgjeruara | Queue maksimale | Koha |
 |---|---|---|---|
 | Easy | 4632 | 738 | ~23 ms |
-| Medium | 929 | 146 | ~7 ms |
+| Medium | 202 050 | 44 010 | ~70 ms |
 | Hard | 2 068 781 | 356 812 | ~1 s |
+
+**Burimet e tabelave.** Easy: shembulli klasik i Sudoku-s nga Wikipedia. Medium: New York Times, nivelli Medium
+(https://www.nytimes.com/puzzles/sudoku/medium; tabela ndryshon çdo dite, ndaj eshte kopjuar ne kod). Hard: tabela e njohur e Arto Inkalas.
+Etiketat vijne nga vështirësia njerëzore, jo nga kostoja e BFS-së; megjithate kostoja rritet nga Easy te Hard.
 
 Ekzekutimi: `java sudoku/Sudoku.java`.
 
