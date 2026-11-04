@@ -4,8 +4,9 @@
 saktesisht nje here ne çdo rresht dhe kolone.
 
 **Paraqitja.** Variabla: qeliza (r, c), n² gjithsej. Domeni: {1..n}. Kufizime (hard): vlera unike
-ne rresht dhe ne kolone. Nyja e pemes = tabela e mbushur pjeserisht; thellesia = numri i qelizave te mbushura
-(pa rreshtin dhe kolonen e pare, qe jane te fiksuara).
+ne rresht dhe ne kolone. Rreshti i pare dhe kolona e pare jane te fiksuara si 1..n (shih thyerjen e simetrise
+me poshte), prandaj variablat qe kerkon DFS/IDDFS jane (n−1)² qelizat e mbetura. Nyja e pemes = tabela e
+mbushur pjeserisht; thellesia = numri i qelizave te mbushura ndermjet atyre (pa rreshtin dhe kolonen e pare).
 
 **Funksioni objektiv.** f(x) = numri i çifteve te qelizave ne te njejtin rresht ose kolone me vlere te njejte,
 minimizohet; zgjidhje eshte f = 0. Backtracking nuk lejon kurre f > 0 ne gjendje te pjesshme.
